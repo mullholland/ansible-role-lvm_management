@@ -1,0 +1,38 @@
+---
+- name: Verify
+  hosts: all
+  become: true
+  gather_facts: true
+
+  tasks:
+    - name: SmokeTests
+      ansible.builtin.debug:
+        msg:
+          - "ansible_version => {{ansible_version}}"
+          - "ansible_distribution => {{ ansible_distribution }}"
+          - "ansible_distribution_major_version => {{ ansible_distribution_major_version }}"
+          - "ansible_os_family  => {{ ansible_os_family}}"
+          - "ansible_system  => {{ ansible_system }}"
+
+    - name: Set variables for DEBIAN based systems
+      ansible.builtin.set_fact:
+        verify_packages:
+          - parted
+          - e2fsprogs
+          - cloud-guest-utils
+      when: ansible_os_family == "Debian"
+
+    - name: Set variables for RedHat based systems
+      ansible.builtin.set_fact:
+        verify_packages:
+          - parted
+          - e2fsprogs
+          - cloud-utils-growpart
+      when: ansible_os_family == "RedHat"
+
+    - name: Check parted and dependency packages are installed
+      ansible.builtin.package:
+        name: "{{ verify_packages }}"
+        state: present
+      register: verify_packages_installed
+      failed_when: (verify_packages_installed is changed) or (verify_packages_installed is failed)

@@ -1,0 +1,12 @@
+---
+lvm_management_max_gap_kb: 1024
+lvm_management_devices: []
+#  - partition: /dev/vda      # Which HDD should be resized
+#    number: 2                # which partition number should be resized
+
+lvm_management_lvm_configuration: []
+#  - name: "lv_root"  # Name of the logical volume group
+#    size: "10G"  # What should happen to the colume
+#                 # 10G => sets the size to 10G regardless of the current size (WARNING DO NOT SHRINK IT!!!!!!)
+#                 # +10G => adds 10G after each ansible run (NOT idempotent!!!)
+#                 # +100%FREE => adds all Free Space to the lv
