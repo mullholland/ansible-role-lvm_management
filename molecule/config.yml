@@ -1,4 +1,7 @@
 ---
+molecule_exceptions:
+  - variation: ubi8/9
+    reason: "Packages not available"
 molecule_scenarios:
   - scenario: "default"
     ansible: ["previous", "current"]
@@ -11,9 +14,10 @@ molecule_scenarios:
       - "centos7"
       - "centos-stream8"
       - "centos-stream9"
-      - "ubi8"
       - "fedora35"
       - "fedora36"
       - "amazonlinux"
       - "rockylinux8"
+      - "rockylinux9"
       - "almalinux8"
+      - "almalinux9"
