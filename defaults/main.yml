@@ -6,7 +6,9 @@ lvm_management_devices: []
 
 lvm_management_lvm_configuration: []
 #  - name: "lv_root"  # Name of the logical volume group
-#    size: "10G"  # What should happen to the colume
-#                 # 10G => sets the size to 10G regardless of the current size (WARNING DO NOT SHRINK IT!!!!!!)
-#                 # +10G => adds 10G after each ansible run (NOT idempotent!!!)
-#                 # +100%FREE => adds all Free Space to the lv
+#    size: "10G"      # What should happen to the colume
+#                     # 10G => sets the size to 10G regardless of the current size (WARNING DO NOT SHRINK IT!!!!!!)
+#                     # +10G => adds 10G after each ansible run (NOT idempotent!!!)
+#                     # +100%FREE => adds all Free Space to the lv
+#    vg: "system"     # The name of the VolumeGroup the LV resides
+#    fstype: "ext4"   # The filesystem the lv uses
