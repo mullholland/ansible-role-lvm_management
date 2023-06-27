@@ -1,26 +1,28 @@
 ---
-- name: DEBUG - Print Partition and number
+- name: resize_pv | DEBUG - Print Partition and number
   ansible.builtin.debug:
     msg: "{{ item.partition }}{{ item.number }}"
 
-- name: Rescan underlying block devices
+- name: resize_pv | Rescan underlying block devices
   ansible.builtin.shell: echo 1 > /sys/class/block/{{ item.partition | basename }}/device/rescan
   failed_when: false
   changed_when: false
   tags:
     - skip_ansible_lint
 
-- name: Partition info
+- name: resize_pv | Partition info
   community.general.parted:
     device: "{{ item.partition }}"
     number: "{{ item.number }}"
   register: partinfo
 
-- name: Set fact -> gap_kb
+- name: resize_pv | Set fact -> gap_kb
   ansible.builtin.set_fact:
     gap_kb: "{{ partinfo.disk.size - partinfo.partitions[vars.item.number-1].end }}"
+  tags:
+    - skip_ansible_lint
 
-- name: DEBUG - partition gap
+- name: resize_pv | DEBUG - partition gap
   ansible.builtin.debug:
     msg: "Gap after partition {{ item.partition }}: {{ lvm_management_max_gap_kb }}kiB"
 
@@ -30,17 +32,19 @@
 # https://unix.stackexchange.com/a/365657
 # parted allows to fix GPT only interactively
 # https://bugs.launchpad.net/ubuntu/+source/parted/+bug/1490608
-- name: use growpart too grow small partition to maximum
+- name: resize_pv | use growpart too grow small partition to maximum
   ansible.builtin.command: 'growpart {{ item.partition }} {{ item.number }}'
+  changed_when: false
+  failed_when: false
   when: lvm_management_max_gap_kb < gap_kb|int
 
-- name: Check existence of physical volume (pv)
+- name: resize_pv | Check existence of physical volume (pv)
   ansible.builtin.command: pvs "{{ item.partition }}{{ item.number }}"
   failed_when: false
   changed_when: false
   register: pvs
 
-- name: Resize physical volume (pv)
+- name: resize_pv | Resize physical volume (pv)
   ansible.builtin.command: 'pvresize "{{ item.partition }}{{ item.number }}"'
   when: pvs.rc == 0
   changed_when: false
