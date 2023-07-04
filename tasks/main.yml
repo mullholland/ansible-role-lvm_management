@@ -8,7 +8,8 @@
     state: present
 
 # Only configure PV/LVM on vms or physical machines
-- include_tasks: resize_pv.yml
+- name: Include PV tasks
+  ansible.builtin.include_tasks: resize_pv.yml
   with_items:
     - "{{ lvm_management_devices }}"
   when:
@@ -16,7 +17,8 @@
     - ansible_virtualization_type != "containerd"
 
 # Only configure PV/LVM on vms or physical machines
-- import_tasks: configure_lvms.yml
+- name: Include LVM tasks
+  ansible.builtin.include_tasks: configure_lvms.yml
   when:
     - ansible_virtualization_type != "docker"
     - ansible_virtualization_type != "containerd"

@@ -1,21 +1,21 @@
 ---
-- name: Resize volumegroup (vg)
+- name: configure_lvms | Resize volumegroup (vg)
   community.general.lvg:
     vg: "{{ item.volumegroup }}"
     pvs: "{{ item.partition }}{{ item.number }}"
   with_items:
     - "{{ lvm_management_devices }}"
 
-- name: Resize logical volume (lvms)
+- name: configure_lvms | Resize logical volume (lvms)
   community.general.lvol:
     vg: "{{ item.vg }}"
     lv: "{{ item.name }}"
-    size: "{{ item.size  }}"
+    size: "{{ item.size }}"
     shrink: false
   with_items:
     - "{{ lvm_management_lvm_configuration }}"
 
-- name: Resize filesystem (fs)
+- name: configure_lvms | Resize filesystem (fs)
   community.general.filesystem:
     dev: "/dev/{{ item.vg }}/{{ item.name }}"
     fstype: "{{ item.fstype }}"
