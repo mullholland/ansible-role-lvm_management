@@ -13,12 +13,11 @@ This example is taken from [`molecule/default/converge.yml`](https://github.com/
 ---
 - name: Converge
   hosts: all
-  become: true
   gather_facts: true
   # vars:
   #   example_var: "value"
   roles:
-    - role: "mullholland.lvm_management"
+    - role: "{{ lookup('env', 'MOLECULE_PROJECT_DIRECTORY') }}"
 ```
 
 
@@ -59,10 +58,13 @@ This role has been tested on these [container images](https://hub.docker.com/u/m
 |container|tags|
 |---------|----|
 |[EL](https://hub.docker.com/r/mullholland/enterpriselinux)|all|
+|[Rocky](https://hub.docker.com/r/mullholland/rockylinux)|all|
+|[AlmaLinux](https://hub.docker.com/r/mullholland/almalinux)|all|
 |[Amazon](https://hub.docker.com/r/mullholland/amazonlinux)|all|
 |[Fedora](https://hub.docker.com/r/mullholland/fedora/)|all|
 |[Ubuntu](https://hub.docker.com/r/mullholland/ubuntu)|all|
 |[Debian](https://hub.docker.com/r/mullholland/debian)|all|
+|[CentOS](https://hub.docker.com/r/mullholland/centos)|all|
 
 The minimum version of Ansible required is 2.10, tests have been done to:
 
