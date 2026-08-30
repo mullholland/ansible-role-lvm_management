@@ -32,7 +32,7 @@
 # https://unix.stackexchange.com/a/365657
 # parted allows to fix GPT only interactively
 # https://bugs.launchpad.net/ubuntu/+source/parted/+bug/1490608
-- name: resize_pv | use growpart too grow small partition to maximum
+- name: resize_pv | Use growpart to grow small partition to maximum
   ansible.builtin.command: 'growpart {{ item.partition }} {{ item.number }}'
   changed_when: false
   failed_when: false
